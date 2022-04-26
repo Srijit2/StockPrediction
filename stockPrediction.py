@@ -69,31 +69,22 @@ def analyze_stock():
   # Train the model
   model.fit(X_train, y_train)
 
-  # predict using the model
-
+  # predict using the model to get training error
   y_pred = model.predict(X_train)
-
-
-  #print (y_pred)
-
   from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error
+  print("Training error:", mean_absolute_error(y_train, y_pred))
 
-
-  #print("Training error:", mean_absolute_error(y_train, y_pred))
-
+  #predict using the model for the testing set
   y_pred = model.predict(X_test)
   #print("Test error:", mean_absolute_error(y_test, y_pred))
-
-
-
-  model.fit(X_train, y_train)
-
+  
 
   # Printout relevant metrics
   # print("Model Coefficients:", model.coef_)
   # print("Mean Absolute Error:", mean_absolute_error(y_test, y_pred))
   # print("Coefficient of Determination:", r2_score(y_test, y_pred))
 
+  #Use the model to predict for the last 30 days to see how well it did.
   ds2 = ds.tail(30)
   #print(ds2.tail(5))
   x_test2 = ds2[['EMA_50', 'ADX_10', 'delta']]
@@ -102,7 +93,7 @@ def analyze_stock():
   y_pred2 = model.predict(x_test2)    
   final = y_pred2
 
-
+  #sum gain vs loss.
   final = y_pred2 - y_actual
   final['real'] = ds['Adj Close'].tail(30)
   final['pred'] = y_pred2
